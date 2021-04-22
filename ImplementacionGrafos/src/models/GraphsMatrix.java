@@ -1,6 +1,5 @@
 package models;
 
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import structures.Node;

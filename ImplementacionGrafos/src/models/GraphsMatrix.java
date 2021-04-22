@@ -132,34 +132,33 @@ public class GraphsMatrix<T> {
 		}else {
 			throw new NullPointerException("El vector ingresado es Nulo");
 		}
-
 	}
 
-	private ArrayList<String> dijkistra(int src) {
+	private ArrayList<String> dijkistra(int position) {
 		int[] allWeights = new int[n];
 		boolean[] processVertex = new boolean[n];
-		initVector(src, allWeights, processVertex);
+		initVector(position, allWeights, processVertex);
 		findShortWays(allWeights, processVertex);
 		return showDijkstra(allWeights);
 	}
 
 	private void findShortWays(int[] allWeights, boolean[] processVertex) {
-		for (int count = 0; count < n - 1; count++) {
-			int u = minDistance(allWeights, processVertex);
-			processVertex[u] = true;
-			for (int v = 0; v < n; v++)
-				if (!processVertex[v] && matrix[u][v] > 0 && allWeights[u] != Integer.MAX_VALUE
-						&& allWeights[u] + matrix[u][v] < allWeights[v])
-					allWeights[v] = allWeights[u] + matrix[u][v];
+		for (int i = 0; i < n - 1; i++) {
+			int min = minDistance(allWeights, processVertex);
+			processVertex[min] = true;
+			for (int k = 0; k < n; k++)
+				if (!processVertex[k] && matrix[min][k] > 0 && allWeights[min] != Integer.MAX_VALUE
+						&& allWeights[min] + matrix[min][k] < allWeights[k])
+					allWeights[k] = allWeights[min] + matrix[min][k];
 		}
 	}
 
-	private void initVector(int src, int[] dist, boolean[] verticeYaProcesado) {
+	private void initVector(int position, int[] allWeights, boolean[] processVertex) {
 		for (int i = 0; i < n; i++) {
-			dist[i] = Integer.MAX_VALUE;
-			verticeYaProcesado[i] = false;
+			allWeights[i] = Integer.MAX_VALUE;
+			processVertex[i] = false;
 		}
-		dist[src] = 0;
+		allWeights[position] = 0;
 	}
 
 	private ArrayList<String> showDijkstra(int[] allWeights) {
@@ -170,15 +169,15 @@ public class GraphsMatrix<T> {
 		return result;
 	}
 
-	private int minDistance(int[] dist, boolean[] verticeYaProcesado) {
+	private int minDistance(int[] allWeights, boolean[] processVertex) {
 		int min = Integer.MAX_VALUE;
-		int min_index = 0;
-		for (int v = 0; v < n; v++)
-			if (verticeYaProcesado[v] == false && dist[v] <= min) {
-				min = dist[v];
-				min_index = v;
+		int min_value = 0;
+		for (int i = 0; i < n; i++)
+			if (processVertex[i] == false && allWeights[i] <= min) {
+				min = allWeights[i];
+				min_value = i;
 			}
-		return min_index;
+		return min_value;
 	}
 
 	private void resetVisitList() {
